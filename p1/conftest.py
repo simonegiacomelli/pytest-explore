@@ -3,8 +3,6 @@
 #     return True
 
 import re
-import sys
-import traceback
 
 import pytest
 
@@ -34,9 +32,6 @@ def pytest_collect_file(file_path, path, parent):
         return None
 
 
-pass
-
-
 class StbtCollector(pytest.File):
     def collect(self):
 
@@ -48,9 +43,6 @@ class StbtCollector(pytest.File):
                     yield StbtRemoteTest.from_parent(self, filename=self.fspath, testname=m.group(1), line_number=n + 1)
 
 
-pass
-
-
 class StbtRemoteTest(pytest.Item):
     def __init__(self, parent, filename, testname, line_number):
         print(f'StbtRemoteTest {parent} {filename} {testname}')
@@ -60,18 +52,11 @@ class StbtRemoteTest(pytest.Item):
         self._line_number = line_number
 
     def __repr__(self):
-        return "StbtRemoteTest(%r, %r, %r)" % (
-            self._filename, self._testname, self._line_number)
-
+        return "StbtRemoteTest(%r, %r, %r)" % (self._filename, self._testname, self._line_number)
 
     def runtest(self):
-        try:
-            # self.session.stbt_args.test_cases = ["%s::%s" % (self._filename, self._testname)]
-            if 'will_fail' in self._testname:
-                raise Exception('Synthetic exception!')
-        finally:
-            # self.session.stbt_args.test_cases = None
-            pass
+        if 'will_fail' in self._testname:
+            raise Exception('Synthetic exception!')
 
     def reportinfo(self):
         return self.fspath, self._line_number, ""
