@@ -1,6 +1,6 @@
-def pytest_ignore_collect(collection_path, path, config):
-    print('p1 pytest_ignore_collect', collection_path, path, config)
-    return True
+# def pytest_ignore_collect(collection_path, path, config):
+#     print('p1 pytest_ignore_collect', collection_path, path, config)
+#     return True
 
 import re
 import sys
@@ -63,13 +63,15 @@ class StbtRemoteTest(pytest.Item):
         return "StbtRemoteTest(%r, %r, %r)" % (
             self._filename, self._testname, self._line_number)
 
+
     def runtest(self):
         try:
-            self.session.stbt_args.test_cases = ["%s::%s" % (self._filename, self._testname)]
+            # self.session.stbt_args.test_cases = ["%s::%s" % (self._filename, self._testname)]
             if 'will_fail' in self._testname:
                 raise Exception('Synthetic exception!')
         finally:
-            self.session.stbt_args.test_cases = None
+            # self.session.stbt_args.test_cases = None
+            pass
 
     def reportinfo(self):
         return self.fspath, self._line_number, ""
