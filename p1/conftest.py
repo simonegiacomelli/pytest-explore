@@ -1,3 +1,5 @@
+# https://buildmedia.readthedocs.org/media/pdf/pytest/latest/pytest.pdf#page=339&zoom=100,96,133
+
 # def pytest_ignore_collect(collection_path, path, config):
 #     print('p1 pytest_ignore_collect', collection_path, path, config)
 #     return True
@@ -12,16 +14,13 @@ from _pytest._code.code import TerminalRepr
 
 def pytest_sessionstart(session):
     pluginmanager = session.config.pluginmanager
-    if not session.config.option.collectonly:
-        pluginmanager.unregister(name='python')
+
+    # if not session.config.option.collectonly:
+    pluginmanager.unregister(name='python')
 
     capmanager = pluginmanager.getplugin('capturemanager')
     capmanager.suspend_global_capture(in_=True)
-
     capmanager.resume_global_capture()
-
-    session.stbt_node = 'node-custom'
-    session.stbt_run_prep = 'j-custom'
 
 
 def pytest_addoption(parser):
