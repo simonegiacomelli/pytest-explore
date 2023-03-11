@@ -3,8 +3,11 @@
 #     return True
 
 import re
+from typing import Union
 
 import pytest
+from _pytest._code import ExceptionInfo
+from _pytest._code.code import TerminalRepr
 
 
 def pytest_sessionstart(session):
@@ -60,3 +63,13 @@ class StbtRemoteTest(pytest.Item):
 
     def reportinfo(self):
         return self.fspath, self._line_number, ""
+
+    def repr_failure(self, excinfo: ExceptionInfo[BaseException],
+                     style: 'Optional[_TracebackStyle]' = None) -> Union[str, TerminalRepr]:
+        traceback = excinfo.traceback
+        ntraceback = traceback.cut(path=__file__)
+        excinfo.traceback = ntraceback.filter()
+
+        return excinfo.getrepr(funcargs=True,
+                               showlocals=False,
+                               style="short", tbfilter=False)
